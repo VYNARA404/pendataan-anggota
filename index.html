@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendataan Anggota Organisasi Kampus</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+h2 {
+    text-align: center;
+}
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+form input, form select, form button {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+form button {
+    grid-column: span 2;
+    background: #1e88e5;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+form button:hover {
+    background: #1565c0;
+}
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background: #1e88e5;
+    color: white;
+}
+img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Form Pendataan Anggota</h2>
+
+    <form id="formAnggota">
+        <input type="text" id="nama" placeholder="Nama Lengkap" required>
+        <input type="text" id="nim" placeholder="NIM" required>
+        <input type="text" id="prodi" placeholder="Program Studi" required>
+        <input type="text" id="angkatan" placeholder="Angkatan" required>
+        <input type="text" id="divisi" placeholder="Divisi" required>
+        <select id="status">
+            <option>Anggota</option>
+            <option>Pengurus</option>
+            <option>Alumni</option>
+        </select>
+        <input type="email" id="email" placeholder="Email Kampus" required>
+        <input type="text" id="hp" placeholder="No. HP" required>
+        <input type="file" id="foto" accept="image/*" required>
+        <button type="submit">Simpan Data</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Nama</th>
+                <th>NIM</th>
+                <th>Prodi</th>
+                <th>Divisi</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="dataAnggota"></tbody>
+    </table>
+</div>
+
+<script>
+document.getElementById("formAnggota").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const nama = document.getElementById("nama").value;
+    const nim = document.getElementById("nim").value;
+    const prodi = document.getElementById("prodi").value;
+    const divisi = document.getElementById("divisi").value;
+    const status = document.getElementById("status").value;
+    const foto = URL.createObjectURL(document.getElementById("foto").files[0]);
+
+    const table = document.getElementById("dataAnggota");
+    const row = table.insertRow();
+
+    row.innerHTML = `
+        <td><img src="${foto}"></td>
+        <td>${nama}</td>
+        <td>${nim}</td>
+        <td>${prodi}</td>
+        <td>${divisi}</td>
+        <td>${status}</td>
+    `;
+
+    document.getElementById("formAnggota").reset();
+});
+</script>
+
+</body>
+</html>
