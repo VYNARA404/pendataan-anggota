@@ -82,43 +82,38 @@ button:hover {
 
 </form>
 </div>
-
 <script>
-
 const scriptURL = "https://script.google.com/macros/s/AKfycbyty1Nb2TarmpTWofZKQRtPW1rpRp4ZMChV5gDrzlKXZUS2KN3GTxVrCZFLtmvSdJkw4g/exec";
 
 document.getElementById("formAnggota").addEventListener("submit", function(e){
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append("data", JSON.stringify({
+        email: document.getElementById("email").value,
+        nama: document.getElementById("nama").value,
+        nama_panggilan: document.getElementById("nama_panggilan").value,
+        asal: document.getElementById("asal").value,
+        tanggal_lahir: document.getElementById("tanggal_lahir").value,
+        nim: document.getElementById("nim").value,
+        prodi: document.getElementById("prodi").value,
+        angkatan: document.getElementById("angkatan").value,
+        departemen: document.getElementById("departemen").value,
+        jabatan: document.getElementById("jabatan").value,
+        whatsapp: document.getElementById("whatsapp").value,
+        instagram: document.getElementById("instagram").value,
+        foto: document.getElementById("foto").value
+    }));
+
     fetch(scriptURL, {
         method: "POST",
-        body: JSON.stringify({
-            email: document.getElementById("email").value,
-            nama: document.getElementById("nama").value,
-            nama_panggilan: document.getElementById("nama_panggilan").value,
-            asal: document.getElementById("asal").value,
-            tanggal_lahir: document.getElementById("tanggal_lahir").value,
-            nim: document.getElementById("nim").value,
-            prodi: document.getElementById("prodi").value,
-            angkatan: document.getElementById("angkatan").value,
-            departemen: document.getElementById("departemen").value,
-            jabatan: document.getElementById("jabatan").value,
-            whatsapp: document.getElementById("whatsapp").value,
-            instagram: document.getElementById("instagram").value,
-            foto: document.getElementById("foto").value
-        })
+        body: formData
     })
-    .then(response => {
-        alert("Data berhasil dikirim!");
-        document.getElementById("formAnggota").reset();
-    })
-    .catch(error => {
-        alert("Terjadi kesalahan!");
-    });
-
+    .then(response => alert("Data berhasil dikirim!"))
+    .catch(error => alert("Terjadi kesalahan!"));
 });
-
 </script>
+
 
 </body>
 </html>
