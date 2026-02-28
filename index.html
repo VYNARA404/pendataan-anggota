@@ -1,132 +1,142 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pendataan Anggota Organisasi Kampus</title>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #eef2f7;
-    margin: 0;
-    padding: 20px;
-}
-.container {
-    max-width: 1000px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-h2 {
-    text-align: center;
-}
-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-form input, form select, form button {
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-form button {
-    grid-column: span 2;
-    background: #1e88e5;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-form button:hover {
-    background: #1565c0;
-}
-table {
-    width: 100%;
-    margin-top: 20px;
-    border-collapse: collapse;
-}
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-}
-th {
-    background: #1e88e5;
-    color: white;
-}
-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Pendataan Anggota Organisasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      getDocs 
+    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+    // 🔥 GANTI DENGAN firebaseConfig DARI FIREBASE KAMU
+   const firebaseConfig = {
+    apiKey: "AIzaSyDK2eA4rJvbtU3nqKMGGs5a1RF_cy-hFLM",
+    authDomain: "pendataan-anggota-kamabea.firebaseapp.com",
+    projectId: "pendataan-anggota-kamabea",
+    storageBucket: "pendataan-anggota-kamabea.firebasestorage.app",
+    messagingSenderId: "155267704320",
+    appId: "1:155267704320:web:47b0857d0cd672c5305ae5"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Pastikan sama dengan nama collection di Firestore kamu
+    const anggotaRef = collection(db, "Anggota");
+
+    window.tambahData = async function () {
+      const nama = document.getElementById("nama").value;
+      const nim = document.getElementById("nim").value;
+      const departemen = document.getElementById("departemen").value;
+
+      if (!nama || !nim || !departemen) {
+        alert("Semua field wajib diisi!");
+        return;
+      }
+
+      await addDoc(anggotaRef, {
+        NAMA: nama,
+        NIM: nim,
+        DEPARTEMEN: departemen
+      });
+
+      alert("Data berhasil disimpan!");
+      document.getElementById("form").reset();
+      tampilkanData();
+    };
+
+    window.tampilkanData = async function () {
+      const querySnapshot = await getDocs(anggotaRef);
+      const tabel = document.getElementById("data");
+      tabel.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const d = doc.data();
+        const row = `
+          <tr>
+            <td>${d.NAMA}</td>
+            <td>${d.NIM}</td>
+            <td>${d.DEPARTEMEN}</td>
+          </tr>
+        `;
+        tabel.innerHTML += row;
+      });
+    };
+
+    window.onload = tampilkanData;
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0d47a1;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background: #1976d2;
+      color: white;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <h2>Pendataan Anggota</h2>
 
-<div class="container">
-    <h2>Form Pendataan Anggota</h2>
-
-    <form id="formAnggota">
-        <input type="text" id="nama" placeholder="Nama Lengkap" required>
-        <input type="text" id="nim" placeholder="NIM" required>
-        <input type="text" id="prodi" placeholder="Program Studi" required>
-        <input type="text" id="angkatan" placeholder="Angkatan" required>
-        <input type="text" id="divisi" placeholder="Divisi" required>
-        <select id="status">
-            <option>Anggota</option>
-            <option>Pengurus</option>
-            <option>Alumni</option>
-        </select>
-        <input type="email" id="email" placeholder="Email Kampus" required>
-        <input type="text" id="hp" placeholder="No. HP" required>
-        <input type="file" id="foto" accept="image/*" required>
-        <button type="submit">Simpan Data</button>
-    </form>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Nama</th>
-                <th>NIM</th>
-                <th>Prodi</th>
-                <th>Divisi</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="dataAnggota"></tbody>
-    </table>
-</div>
-
-<script>
-document.getElementById("formAnggota").addEventListener("submit", function(e){
-    e.preventDefault();
-
-    const nama = document.getElementById("nama").value;
-    const nim = document.getElementById("nim").value;
-    const prodi = document.getElementById("prodi").value;
-    const divisi = document.getElementById("divisi").value;
-    const status = document.getElementById("status").value;
-    const foto = URL.createObjectURL(document.getElementById("foto").files[0]);
-
-    const table = document.getElementById("dataAnggota");
-    const row = table.insertRow();
-
-    row.innerHTML = `
-        <td><img src="${foto}"></td>
-        <td>${nama}</td>
-        <td>${nim}</td>
-        <td>${prodi}</td>
-        <td>${divisi}</td>
-        <td>${status}</td>
-    `;
-
-    document.getElementById("formAnggota").reset();
-});
-</script>
-
-</body>
-</html>
+    <form id="form" onsubmit="event.preventDefault(); tambahData();">
+      <input type="text" id="nama" placeholder="Nama Lengkap">
+      <input type="text" id="nim" placeholder="NIM">
+      <input type="text" id="departemen" placeholder="Departemen">
+      <button type="submit">Simpan Data</button>
+    </
