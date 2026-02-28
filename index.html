@@ -50,6 +50,22 @@ button {
 button:hover {
     background: #1565c0;
 }
+.upload-box {
+    display: block;
+    text-align: center;
+    padding: 25px;
+    border: 2px dashed #1e88e5;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #1e88e5;
+    background: #f0f7ff;
+    transition: 0.3s;
+}
+
+.upload-box:hover {
+    background: #e3f2fd;
+}
 </style>
 </head>
 
@@ -76,7 +92,11 @@ button:hover {
 <input type="text" id="jabatan" placeholder="Jabatan" required>
 <input type="text" id="whatsapp" placeholder="Nomor WhatsApp" required>
 <input type="text" id="instagram" placeholder="Akun Instagram">
-<input type="text" id="foto" placeholder="Link Foto Google Drive" required>
+<label for="foto" class="upload-box">
+    ⬆️ Tambahkan File
+</label>
+<input type="file" id="foto" accept="image/*" required hidden>
+
 
 <button type="submit">Kirim Data</button>
 
@@ -118,8 +138,11 @@ document.getElementById("formAnggota").addEventListener("submit", function(e){
             method: "POST",
             body: formData
         })
-        .then(response => alert("Data berhasil dikirim!"))
-        .catch(error => alert("Terjadi kesalahan!"));
+        .then(() => {
+            alert("Data berhasil dikirim!");
+            document.getElementById("formAnggota").reset();
+        })
+        .catch(() => alert("Terjadi kesalahan!"));
     };
 
     reader.readAsDataURL(file);
