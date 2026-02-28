@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pendataan Anggota Organisasi</title>
+<title>Pendataan Anggota KAMABEA</title>
 
 <style>
 body {
@@ -88,29 +88,41 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbyty1Nb2TarmpTWofZKQR
 document.getElementById("formAnggota").addEventListener("submit", function(e){
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("data", JSON.stringify({
-        email: document.getElementById("email").value,
-        nama: document.getElementById("nama").value,
-        nama_panggilan: document.getElementById("nama_panggilan").value,
-        asal: document.getElementById("asal").value,
-        tanggal_lahir: document.getElementById("tanggal_lahir").value,
-        nim: document.getElementById("nim").value,
-        prodi: document.getElementById("prodi").value,
-        angkatan: document.getElementById("angkatan").value,
-        departemen: document.getElementById("departemen").value,
-        jabatan: document.getElementById("jabatan").value,
-        whatsapp: document.getElementById("whatsapp").value,
-        instagram: document.getElementById("instagram").value,
-        foto: document.getElementById("foto").value
-    }));
+    const file = document.getElementById("foto").files[0];
+    const reader = new FileReader();
 
-    fetch(scriptURL, {
-        method: "POST",
-        body: formData
-    })
-    .then(response => alert("Data berhasil dikirim!"))
-    .catch(error => alert("Terjadi kesalahan!"));
+    reader.onload = function() {
+
+        const base64File = reader.result.split(",")[1];
+
+        const formData = new FormData();
+        formData.append("data", JSON.stringify({
+            email: document.getElementById("email").value,
+            nama: document.getElementById("nama").value,
+            nama_panggilan: document.getElementById("nama_panggilan").value,
+            asal: document.getElementById("asal").value,
+            tanggal_lahir: document.getElementById("tanggal_lahir").value,
+            nim: document.getElementById("nim").value,
+            prodi: document.getElementById("prodi").value,
+            angkatan: document.getElementById("angkatan").value,
+            departemen: document.getElementById("departemen").value,
+            jabatan: document.getElementById("jabatan").value,
+            whatsapp: document.getElementById("whatsapp").value,
+            instagram: document.getElementById("instagram").value,
+            fileName: file.name,
+            mimeType: file.type,
+            fileData: base64File
+        }));
+
+        fetch(scriptURL, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => alert("Data berhasil dikirim!"))
+        .catch(error => alert("Terjadi kesalahan!"));
+    };
+
+    reader.readAsDataURL(file);
 });
 </script>
 
