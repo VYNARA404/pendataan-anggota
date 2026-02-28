@@ -60,7 +60,13 @@ button:hover {
 
 <form id="formAnggota">
 
-<input type="email" id="email" placeholder="Email" required>
+<input 
+      type="email" 
+      id="email" 
+      placeholder="Email UNNES" 
+      pattern="^[a-zA-Z0-9._%+-]+@(students\.unnes\.ac\.id|mail\.unnes\.ac\.id)$"
+      title="Gunakan email resmi UNNES"
+      required>
 <input type="text" id="nama" placeholder="Nama Lengkap" required>
 <input type="text" id="nama_panggilan" placeholder="Nama Panggilan" required>
 <input type="text" id="asal" placeholder="Asal" required>
