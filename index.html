@@ -1,134 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Pendataan Anggota KAMABEA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendataan Anggota Organisasi</title>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { 
-      getFirestore, 
-      collection, 
-      addDoc,
-      onSnapshot,
-      deleteDoc,
-      doc
-    } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 20px;
+}
 
-    // 🔥 PASTE CONFIG FIREBASE KAMU DI SINI
-    const firebaseConfig = {
-    apiKey: "AIzaSyDK2eA4rJvbtU3nqKMGGs5a1RF_cy-hFLM",
-    authDomain: "pendataan-anggota-kamabea.firebaseapp.com",
-    projectId: "pendataan-anggota-kamabea",
-    storageBucket: "pendataan-anggota-kamabea.firebasestorage.app",
-    messagingSenderId: "155267704320",
-    appId: "1:155267704320:web:47b0857d0cd672c5305ae5"
-    };
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const anggotaRef = collection(db, "Anggota");
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    // Simpan Data
-    window.simpanData = async function () {
-      const nama = document.getElementById("nama").value;
-      const nim = document.getElementById("nim").value;
+form {
+    display: grid;
+    gap: 10px;
+}
 
-      if (!nama || !nim) {
-        alert("Semua field wajib diisi!");
-        return;
-      }
+input, select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
 
-      await addDoc(anggotaRef, {
-        NAMA: nama,
-        NIM: nim
-      });
+button {
+    padding: 12px;
+    background: #1e88e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-      document.getElementById("nama").value = "";
-      document.getElementById("nim").value = "";
-    };
-
-    // Tampilkan Data Realtime
-    onSnapshot(anggotaRef, (snapshot) => {
-      const tabel = document.getElementById("data");
-      tabel.innerHTML = "";
-
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const row = `
-          <tr>
-            <td>${data.NAMA}</td>
-            <td>${data.NIM}</td>
-            <td>
-              <button onclick="hapusData('${docSnap.id}')">Hapus</button>
-            </td>
-          </tr>
-        `;
-        tabel.innerHTML += row;
-      });
-    });
-
-    // Hapus Data
-    window.hapusData = async function(id) {
-      await deleteDoc(doc(db, "Anggota", id));
-    };
-
-  </script>
-
-  <style>
-    body { font-family: Arial; padding: 20px; background:#f4f6f9; }
-    .box {
-      max-width:600px;
-      margin:auto;
-      background:white;
-      padding:20px;
-      border-radius:10px;
-      box-shadow:0 5px 15px rgba(0,0,0,0.1);
-    }
-    input, button {
-      width:100%;
-      padding:10px;
-      margin:10px 0;
-    }
-    table {
-      width:100%;
-      margin-top:20px;
-      border-collapse:collapse;
-    }
-    th, td {
-      border:1px solid #ddd;
-      padding:8px;
-      text-align:center;
-    }
-    th { background:#1976d2; color:white; }
-    button {
-      background:#1976d2;
-      color:white;
-      border:none;
-      cursor:pointer;
-    }
-    button:hover { background:#0d47a1; }
-  </style>
+button:hover {
+    background: #1565c0;
+}
+</style>
 </head>
 
 <body>
-  <div class="box">
-    <h2>Pendataan Anggota</h2>
 
-    <input type="text" id="nama" placeholder="Nama">
-    <input type="text" id="nim" placeholder="NIM">
-    <button onclick="simpanData()">Simpan Data</button>
+<div class="container">
+<h2>Form Pendataan Anggota</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>NIM</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody id="data"></tbody>
-    </table>
-  </div>
+<form id="formAnggota">
+
+<input type="email" id="email" placeholder="Email" required>
+<input type="text" id="nama" placeholder="Nama Lengkap" required>
+<input type="text" id="nama_panggilan" placeholder="Nama Panggilan" required>
+<input type="text" id="asal" placeholder="Asal" required>
+<input type="date" id="tanggal_lahir" required>
+<input type="text" id="nim" placeholder="NIM" required>
+<input type="text" id="prodi" placeholder="Program Studi" required>
+<input type="text" id="angkatan" placeholder="Angkatan" required>
+<input type="text" id="departemen" placeholder="Departemen" required>
+<input type="text" id="jabatan" placeholder="Jabatan" required>
+<input type="text" id="whatsapp" placeholder="Nomor WhatsApp" required>
+<input type="text" id="instagram" placeholder="Akun Instagram">
+<input type="text" id="foto" placeholder="Link Foto Google Drive" required>
+
+<button type="submit">Kirim Data</button>
+
+</form>
+</div>
+
+<script>
+
+const scriptURL = "https://script.google.com/a/macros/students.unnes.ac.id/s/AKfycbymCPbm3Ds2pkR2RtGW6N06EJnvbdnQ1cpppRRFaikhsfJXKGQGGCa_eLDSrne7K_Rc/exec";
+
+document.getElementById("formAnggota").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({
+            email: document.getElementById("email").value,
+            nama: document.getElementById("nama").value,
+            nama_panggilan: document.getElementById("nama_panggilan").value,
+            asal: document.getElementById("asal").value,
+            tanggal_lahir: document.getElementById("tanggal_lahir").value,
+            nim: document.getElementById("nim").value,
+            prodi: document.getElementById("prodi").value,
+            angkatan: document.getElementById("angkatan").value,
+            departemen: document.getElementById("departemen").value,
+            jabatan: document.getElementById("jabatan").value,
+            whatsapp: document.getElementById("whatsapp").value,
+            instagram: document.getElementById("instagram").value,
+            foto: document.getElementById("foto").value
+        })
+    })
+    .then(response => {
+        alert("Data berhasil dikirim!");
+        document.getElementById("formAnggota").reset();
+    })
+    .catch(error => {
+        alert("Terjadi kesalahan!");
+    });
+
+});
+
+</script>
+
 </body>
 </html>
